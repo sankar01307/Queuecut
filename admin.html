@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QueueCut - Admin Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --primary-dark: #2980b9;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --warning-color: #f39c12;
+      --info-color: #9b59b6;
+      --gray-color: #95a5a6;
+      --light-gray: #f5f7fa;
+      --white: #ffffff;
+      --text-dark: #2c3e50;
+      --text-light: #7f8c8d;
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --sidebar-width: 250px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* Login Screen */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+    }
+    
+    .login-card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--light-gray);
+      border-radius: 50%;
+    }
+    
+    .logo i {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+    }
+    
+    h1 {
+      margin-bottom: 5px;
+      color: var(--text-dark);
+      text-align: center;
+    }
+    
+    .subtitle {
+      color: var(--text-light);
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .input-with-icon {
+      position: relative;
+    }
+    
+    .input-with-icon i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+    
+    .login-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    .error-message {
+      background-color: rgba(231, 76, 60, 0.1);
+      color: var(--danger-color);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+      text-align: left;
+      border-left: 4px solid var(--danger-color);
+    }
+    
+    .error-message i {
+      margin-right: 8px;
+    }
+    
+    /* Dashboard Styles (Initially Hidden) */
+    #adminDashboard {
+      display: none;
+    }
+    
+    .sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(to bottom, var(--primary-color), var(--primary-dark));
+      color: white;
+      padding: 20px 0;
+      height: 100vh;
+      position: fixed;
+      overflow-y: auto;
+    }
+    
+    .logo-container {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .admin-info {
+      text-align: center;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .admin-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid white;
+      margin: 0 auto 10px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--primary-color);
+    }
+    
+    .admin-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .admin-role {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      padding: 12px 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .nav-item:hover, .nav-item.active {
+      background-color: rgba(255,255,255,0.1);
+      border-left: 4px solid white;
+    }
+    
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eaecef;
+    }
+    
+    .page-title {
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .search-box {
+      position: relative;
+    }
+    
+    .search-box input {
+      padding: 10px 15px 10px 40px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      width: 250px;
+    }
+    
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+    
+    .notification-btn {
+      background: var(--light-gray);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--danger-color);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Stats Overview */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .canteen-stat {
+      background-color: rgba(52, 152, 219, 0.1);
+      color: var(--primary-color);
+    }
+    
+    .xerox-stat {
+      background-color: rgba(155, 89, 182, 0.1);
+      color: var(--info-color);
+    }
+    
+    .admin-stat {
+      background-color: rgba(46, 204, 113, 0.1);
+      color: var(--success-color);
+    }
+    
+    .pending-stat {
+      background-color: rgba(243, 156, 18, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .stat-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+    
+    .stat-info p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    /* Requests Table */
+    .requests-section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    
+    .section-header {
+      padding: 20px;
+      border-bottom: 1px solid #eaecef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .section-title {
+      font-weight: 600;
+    }
+    
+    .filters {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+    }
+    
+    .requests-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .requests-table th,
+    .requests-table td {
+      padding: 15px 20px;
+      text-align: left;
+    }
+    
+    .requests-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .requests-table tr {
+      border-bottom: 1px solid #eaecef;
+    }
+    
+    .requests-table tr:last-child {
+      border-bottom: none;
+    }
+    
+    .requests-table tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: white;
+      display: inline-block;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .status-pending {
+      background-color: var(--warning-color);
+    }
+    
+    .status-completed {
+      background-color: var(--success-color);
+    }
+    
+    .status-cancelled {
+      background-color: var(--gray-color);
+    }
+    
+    .status-accepted {
+      background-color: var(--primary-color);
+    }
+    
+    .status-ready {
+      background-color: var(--info-color);
+    }
+    
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
+    
+    .btn-accept {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .btn-ready {
+      background-color: var(--info-color);
+      color: white;
+    }
+    
+    .btn-complete {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-cancel {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 70px;
+        overflow: visible;
+      }
+      
+      .logo-container, .admin-info, .nav-item span {
+        display: none;
+      }
+      
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+      
+      .nav-item {
+        justify-content: center;
+        padding: 15px;
+      }
+      
+      .main-content {
+        margin-left: 70px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-box input {
+        width: 180px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .header-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .search-box input {
+        width: 100%;
+      }
+      
+      .filters {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-container">
+    <div class="login-card">
+      <div class="logo">
+        <i class="fas fa-cut"></i>
+      </div>
+      <h1>QueueCut Admin</h1>
+      <p class="subtitle">Sign in to access the dashboard</p>
+      
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div class="input-with-icon">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="admin@queuecut.com" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-with-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Enter password" required>
+          </div>
+        </div>
+        
+        <button type="submit" class="login-btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </form>
+      
+      <div id="errorMessage" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorText">Invalid credentials. Please try again.</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Admin Dashboard (Initially Hidden) -->
+  <div id="adminDashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo-container">
+        <img src="https://cdn-icons-png.flaticon.com/512/2454/2454183.png" alt="QueueCut Logo" class="logo">
+      </div>
+      
+      <div class="admin-info">
+        <div class="admin-avatar">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="admin-name" id="adminName">Admin User</div>
+        <div class="admin-role">Administrator</div>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item active">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </li>
+        <li class="nav-item">
+          <i class="fas fa-utensils"></i>
+          <span>Canteen Orders</span>
+        </li>
+        <li class="nav-item">
+          <i class="fas fa-print"></i>
+          <span>Xerox Requests</span>
+        </li>
+        <li class="nav-item">
+          <i class="fas fa-file-alt"></i>
+          <span>Admin Services</span>
+        </li>
+        <li class="nav-item">
+          <i class="fas fa-users"></i>
+          <span>Student Management</span>
+        </li>
+        <li class="nav-item" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1 class="page-title">Admin Dashboard</h1>
+        <div class="header-actions">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search requests..." id="searchInput">
+          </div>
+          <div class="notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats Overview -->
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-icon canteen-stat">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="canteenCount">0</h3>
+            <p>Canteen Orders</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon xerox-stat">
+            <i class="fas fa-print"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="xeroxCount">0</h3>
+            <p>Xerox Requests</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon admin-stat">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="adminCount">0</h3>
+            <p>Admin Services</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon pending-stat">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="pendingCount">0</h3>
+            <p>Pending Requests</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recent Requests -->
+      <div class="requests-section">
+        <div class="section-header">
+          <h2 class="section-title">Recent Requests</h2>
+          <div class="filters">
+            <select class="filter-select" id="serviceFilter">
+              <option value="all">All Services</option>
+              <option value="canteen">Canteen</option>
+              <option value="xerox">Xerox</option>
+              <option value="admin">Admin</option>
+            </select>
+            <select class="filter-select" id="statusFilter">
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="accepted">Accepted</option>
+              <option value="ready">Ready</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="requests-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Service</th>
+                <th>Details</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="requestsTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 30px;">
+                  <div class="spinner"></div>
+                  <p>Loading requests...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, orderBy, query, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCQj6WTu9-mPgLbe81UFMEE3a8tb97PV9w",
+      authDomain: "queue-cut-013.firebaseapp.com",
+      databaseURL: "https://queue-cut-013-default-rtdb.firebaseio.com",
+      projectId: "queue-cut-013",
+      storageBucket: "queue-cut-013.firebasestorage.app",
+      messagingSenderId: "513579653174",
+      appId: "1:513579653174:web:b63ab32d08790e0e9fa097",
+      measurementId: "G-0V1S2GZC0Y"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    
+    // Global variables
+    let requests = [];
+    let unsubscribeRequests = null;
+    
+    // Initialize the application
+    function initApp() {
+      // Check if user is logged in
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          showDashboard();
+          setupRealTimeListeners();
+        } else {
+          showLogin();
+        }
+      });
+    }
+    
+    // Show login screen
+    function showLogin() {
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminDashboard').style.display = 'none';
+    }
+    
+    // Show dashboard
+    function showDashboard() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+      
+      const user = auth.currentUser;
+      if (user) {
+        document.getElementById('adminName').textContent = user.email;
+      }
+    }
+    
+    // Login function
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in successfully
+          showDashboard();
+          setupRealTimeListeners();
+        })
+        .catch((error) => {
+          showError('Invalid credentials. Please try again.');
+          console.error('Login error:', error);
+        });
+    });
+    
+    // Logout function
+    function logout() {
+      if (unsubscribeRequests) unsubscribeRequests();
+      
+      signOut(auth)
+        .then(() => {
+          showLogin();
+        })
+        .catch((error) => {
+          console.error('Sign out error:', error);
+        });
+    }
+    
+    // Set up real-time listeners for Firestore data
+    function setupRealTimeListeners() {
+      const q = query(collection(db, "requests"), orderBy("timestamp", "desc"));
+      
+      unsubscribeRequests = onSnapshot(q, (snapshot) => {
+        requests = [];
+        snapshot.forEach((doc) => {
+          requests.push({ id: doc.id, ...doc.data() });
+        });
+        
+        updateStats();
+        renderRequestsTable();
+      }, (error) => {
+        console.error('Error getting requests:', error);
+        // For demo purposes, show sample data if Firebase isn't configured properly
+        loadSampleData();
+      });
+    }
+    
+    // Update statistics cards
+    function updateStats() {
+      const canteenCount = requests.filter(r => r.service === 'canteen').length;
+      const xeroxCount = requests.filter(r => r.service === 'xerox').length;
+      const adminCount = requests.filter(r => r.service === 'admin').length;
+      const pendingCount = requests.filter(r => r.status === 'pending').length;
+      
+      document.getElementById('canteenCount').textContent = canteenCount;
+      document.getElementById('xeroxCount').textContent = xeroxCount;
+      document.getElementById('adminCount').textContent = adminCount;
+      document.getElementById('pendingCount').textContent = pendingCount;
+    }
+    
+    // Render requests table
+    function renderRequestsTable() {
+      const serviceFilter = document.getElementById('serviceFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      
+      let filteredRequests = requests;
+      
+      // Apply filters
+      if (serviceFilter !== 'all') {
+        filteredRequests = filteredRequests.filter(r => r.service === serviceFilter);
+      }
+      
+      if (statusFilter !== 'all') {
+        filteredRequests = filteredRequests.filter(r => r.status === statusFilter);
+      }
+      
+      // Apply search
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      if (searchTerm) {
+        filteredRequests = filteredRequests.filter(r => 
+          r.studentId.toLowerCase().includes(searchTerm) || 
+          (r.details && r.details.toLowerCase().includes(searchTerm))
+        );
+      }
+      
+      // Render table
+      if (filteredRequests.length === 0) {
+        document.getElementById('requestsTableBody').innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 30px;">
+              <i class="fas fa-inbox" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
+              <p>No requests found</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      let tableHTML = '';
+      
+      filteredRequests.forEach(request => {
+        // Format timestamp
+        const requestTime = request.timestamp ? request.timestamp.toDate().toLocaleTimeString() : 'N/A';
+        
+        tableHTML += `
+          <tr>
+            <td>${request.studentId}</td>
+            <td>${formatServiceName(request.service)}</td>
+            <td>${request.details || 'No details'}</td>
+            <td>${requestTime}</td>
+            <td><span class="status-badge status-${request.status}">${formatStatusName(request.status)}</span></td>
+            <td>${getActionButtons(request.status, request.id)}</td>
+          </tr>
+        `;
+      });
+      
+      document.getElementById('requestsTableBody').innerHTML = tableHTML;
+    }
+    
+    // Format service name for display
+    function formatServiceName(service) {
+      switch(service) {
+        case 'canteen': return 'Canteen';
+        case 'xerox': return 'Xerox';
+        case 'admin': return 'Admin';
+        default: return service;
+      }
+    }
+    
+    // Format status name for display
+    function formatStatusName(status) {
+      return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+    
+    // Get appropriate action buttons based on status
+    function getActionButtons(status, id) {
+      switch(status) {
+        case 'pending':
+          return `
+            <button class="action-btn btn-accept" onclick="updateRequestStatus('${id}', 'accepted')">
+              <i class="fas fa-check"></i> Accept
+            </button>
+            <button class="action-btn btn-cancel" onclick="updateRequestStatus('${id}', 'cancelled')">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+          `;
+        case 'accepted':
+          return `
+            <button class="action-btn btn-ready" onclick="updateRequestStatus('${id}', 'ready')">
+              <i class="fas fa-check-circle"></i> Ready
+            </button>
+          `;
+        case 'ready':
+          return `
+            <button class="action-btn btn-complete" onclick="updateRequestStatus('${id}', 'completed')">
+              <i class="fas fa-check"></i> Complete
+            </button>
+          `;
+        case 'completed':
+          return `
+            <button class="action-btn btn-complete" disabled>
+              <i class="fas fa-check"></i> Completed
+            </button>
+          `;
+        case 'cancelled':
+          return `
+            <button class="action-btn btn-cancel" disabled>
+              <i class="fas fa-times"></i> Cancelled
+            </button>
+          `;
+        default:
+          return '';
+      }
+    }
+    
+    // Update request status
+    function updateRequestStatus(id, newStatus) {
+      const requestRef = doc(db, "requests", id);
+      
+      updateDoc(requestRef, {
+        status: newStatus,
+        updatedAt: serverTimestamp()
+      })
+      .then(() => {
+        console.log('Request status updated successfully');
+      })
+      .catch((error) => {
+        console.error('Error updating request status:', error);
+        alert('Error updating request status: ' + error.message);
+      });
+    }
+    
+    // Show error message
+    function showError(message) {
+      const errorElement = document.getElementById('errorMessage');
+      document.getElementById('errorText').textContent = message;
+      errorElement.style.display = 'block';
+      
+      // Hide error after 5 seconds
+      setTimeout(() => {
+        errorElement.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Load sample data for demo purposes
+    function loadSampleData() {
+      requests = [
+        { id: '1', studentId: 'S12345', service: 'canteen', details: 'Coffee, Sandwich', status: 'ready', timestamp: new Date() },
+        { id: '2', studentId: 'S18762', service: 'xerox', details: '15 pages, Single side', status: 'accepted', timestamp: new Date(Date.now() - 10*60000) },
+        { id: '3', studentId: 'S13429', service: 'admin', details: 'Certificate Request', status: 'pending', timestamp: new Date(Date.now() - 25*60000) },
+        { id: '4', studentId: 'S15623', service: 'canteen', details: 'Meals, Samosa', status: 'completed', timestamp: new Date(Date.now() - 42*60000) },
+        { id: '5', studentId: 'S19845', service: 'xerox', details: '30 pages, Double side', status: 'ready', timestamp: new Date(Date.now() - 60*60000) }
+      ];
+      
+      updateStats();
+      renderRequestsTable();
+    }
+    
+    // Set up event listeners for filters and search
+    function setupEventListeners() {
+      document.getElementById('serviceFilter').addEventListener('change', renderRequestsTable);
+      document.getElementById('statusFilter').addEventListener('change', renderRequestsTable);
+      document.getElementById('searchInput').addEventListener('input', renderRequestsTable);
+      
+      // Clear error when user starts typing
+      document.getElementById('email').addEventListener('input', function() {
+        document.getElementById('errorMessage').style.display = 'none';
+      });
+      
+      document.getElementById('password').addEventListener('input', function() {
+        document.getElementById('errorMessage').style.display = 'none';
+      });
+    }
+    
+    // Initialize the application when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      initApp();
+      setupEventListeners();
+    });
+  </script>
+</body>
+</html>

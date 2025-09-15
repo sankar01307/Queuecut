@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QueueCut - Student Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --primary-dark: #2980b9;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --warning-color: #f39c12;
+      --info-color: #9b59b6;
+      --gray-color: #95a5a6;
+      --light-gray: #f5f7fa;
+      --white: #ffffff;
+      --text-dark: #2c3e50;
+      --text-light: #7f8c8d;
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      background-color: var(--light-gray);
+      max-width: 1000px;
+      margin: 0 auto;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .header-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--primary-color);
+    }
+    
+    .logo {
+      height: 50px;
+      width: auto;
+    }
+    
+    h1 {
+      margin: 0;
+      flex-grow: 1;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    
+    .about-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 6px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .about-link:hover {
+      background-color: #e3f2fd;
+      text-decoration: underline;
+    }
+    
+    .welcome-section {
+      background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .welcome-section h2 {
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .welcome-section p {
+      opacity: 0.9;
+      margin-bottom: 15px;
+    }
+    
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .tab-container {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      background: white;
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+    }
+    
+    .tab {
+      padding: 15px 25px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      position: relative;
+      flex: 1;
+      text-align: center;
+    }
+    
+    .tab.active {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    
+    .tab.active:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+    
+    .tab:hover:not(.active) {
+      background-color: #f9f9f9;
+    }
+    
+    .tab-content {
+      display: none;
+      background: white;
+      border-radius: 0 0 10px 10px;
+      padding: 25px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 30px;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+    
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .submit-btn {
+      background-color: var(--primary-color);
+      color: white;
+      width: 100%;
+    }
+    
+    .submit-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: white;
+      display: inline-block;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .status-pending {
+      background-color: var(--warning-color);
+    }
+    
+    .status-completed {
+      background-color: var(--success-color);
+    }
+    
+    .status-cancelled {
+      background-color: var(--gray-color);
+    }
+    
+    .status-accepted {
+      background-color: var(--primary-color);
+    }
+    
+    .status-ready {
+      background-color: var(--info-color);
+    }
+    
+    .request-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--primary-color);
+      transition: transform 0.3s;
+    }
+    
+    .request-card:hover {
+      transform: translateY(-3px);
+    }
+    
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .request-title {
+      font-weight: 700;
+      color: var(--text-dark);
+      font-size: 1.1rem;
+    }
+    
+    .request-time {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .request-details {
+      margin-bottom: 15px;
+      color: var(--text-dark);
+    }
+    
+    .request-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .cancel-btn {
+      background-color: var(--danger-color);
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+    
+    .cancel-btn:hover {
+      background-color: #c0392b;
+    }
+    
+    .user-error {
+      background: var(--danger-color);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      display: none;
+    }
+    
+    .user-success {
+      background: var(--success-color);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      display: none;
+    }
+    
+    #loadingUser {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 1.2rem;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+    }
+    
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid var(--primary-color);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .modal-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    
+    .history-item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .history-item:hover {
+      transform: translateY(-3px);
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .history-status {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .history-time {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .queue-position {
+      background-color: #e3f2fd;
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+      display: inline-block;
+      color: var(--primary-dark);
+    }
+    
+    .estimated-time {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .progress-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 10px;
+      background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+    
+    .service-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary-color);
+    }
+    
+    .service-card.selected {
+      border-color: var(--primary-color);
+      background-color: #f0f8ff;
+    }
+    
+    .service-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .service-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--light-gray);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+    
+    .service-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    
+    .service-desc {
+      color: var(--text-light);
+      margin-bottom: 15px;
+    }
+    
+    .service-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .service-feature {
+      background: var(--light-gray);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-light);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #ddd;
+    }
+    
+    .empty-state p {
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      .header-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .tab-container {
+        flex-direction: column;
+      }
+      
+      .request-actions {
+        flex-direction: column;
+      }
+      
+      .request-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loadingUser">
+    <div class="spinner"></div>
+    <p>Processing your request...</p>
+  </div>
+  
+  <div id="userError" class="user-error">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="errorMessage"></span>
+  </div>
+  
+  <div id="userSuccess" class="user-success">
+    <i class="fas fa-check-circle"></i>
+    <span id="successMessage"></span>
+  </div>
+  
+  <!-- Cancel Confirmation Modal -->
+  <div id="cancelModal" class="modal">
+    <div class="modal-content">
+      <h3><i class="fas fa-times-circle"></i> Cancel Request</h3>
+      <p>Are you sure you want to cancel this request? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button onclick="hideModal()">No, Keep It</button>
+        <button class="cancel-btn" onclick="confirmCancel()">Yes, Cancel</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="header-container">
+    <img src="https://cdn-icons-png.flaticon.com/512/2454/2454183.png" alt="QueueCut Logo" class="logo">
+    <h1>QueueCut Student Portal</h1>
+    <a href="#" class="about-link">
+      <i class="fas fa-info-circle"></i> About Us
+    </a>
+  </div>
+  
+  <div class="welcome-section">
+    <h2>Welcome to QueueCut!</h2>
+    <p>Skip the long queues and manage your campus service requests online. Submit, track, and receive your orders without waiting in line.</p>
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-number">124</div>
+        <div class="stat-label">Requests Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Satisfaction Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">12m</div>
+        <div class="stat-label">Avg. Wait Time</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-container">
+    <div class="tab active" onclick="switchTab('new')">
+      <i class="fas fa-plus-circle"></i> New Request
+    </div>
+    <div class="tab" onclick="switchTab('active')">
+      <i class="fas fa-clock"></i> Active Requests
+    </div>
+    <div class="tab" onclick="switchTab('history')">
+      <i class="fas fa-history"></i> History
+    </div>
+  </div>
+  
+  <!-- New Request Tab -->
+  <div id="newTab" class="tab-content active">
+    <h2>Submit New Request</h2>
+    <p class="service-desc">Select a service and provide the necessary details to submit your request.</p>
+    
+    <div class="form-group">
+      <label for="studentId"><i class="fas fa-id-card"></i> Student ID</label>
+      <input type="text" id="studentId" placeholder="Enter your student ID" required>
+    </div>
+    
+    <h3 style="margin: 25px 0 15px;">Select Service</h3>
+    
+    <div class="service-cards">
+      <div class="service-card" onclick="selectService('canteen')">
+        <div class="service-header">
+          <div class="service-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="service-title">Canteen Order</div>
+        </div>
+        <div class="service-desc">Pre-order your meals and snacks from the college canteen.</div>
+        <div class="service-features">
+          <span class="service-feature">No waiting</span>
+          <span class="service-feature">Prepared on time</span>
+          <span class="service-feature">Multiple payment options</span>
+        </div>
+      </div>
+      
+      <div class="service-card" onclick="selectService('xerox')">
+        <div class="service-header">
+          <div class="service-icon">
+            <i class="fas fa-print"></i>
+          </div>
+          <div class="service-title">Xerox Service</div>
+        </div>
+        <div class="service-desc">Get your documents printed without waiting in line.</div>
+        <div class="service-features">
+          <span class="service-feature">Pickup notification</span>
+          <span class="service-feature">Cost calculation</span>
+          <span class="service-feature">Multiple options</span>
+        </div>
+      </div>
+      
+      <div class="service-card" onclick="selectService('admin')">
+        <div class="service-header">
+          <div class="service-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="service-title">Admin Office</div>
+        </div>
+        <div class="service-desc">Request administrative services and documents.</div>
+        <div class="service-features">
+          <span class="service-feature">Document requests</span>
+          <span class="service-feature">Certificate issuance</span>
+          <span class="service-feature">Quick processing</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Canteen Form -->
+    <div id="canteenForm" style="display: none; margin-top: 25px;">
+      <h3 style="margin-bottom: 15px;">Canteen Order Details</h3>
+      
+      <div class="form-group">
+        <label>Select Items</label>
+        <div id="canteenItems" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <label style="display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="checkbox" name="canteenItem" value="Coffee" onchange="updateCanteenTotal()">
+            <span>Coffee (₹10)</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="checkbox" name="canteenItem" value="Tea" onchange="updateCanteenTotal()">
+            <span>Tea (₹10)</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="checkbox" name="canteenItem" value="Sandwich" onchange="updateCanteenTotal()">
+            <span>Sandwich (₹25)</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="checkbox" name="canteenItem" value="Samosa" onchange="updateCanteenTotal()">
+            <span>Samosa (₹15)</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="checkbox" name="canteenItem" value="Meals" onchange="updateCanteenTotal()">
+            <span>Meals (₹50)</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="canteenPayment">Payment Method</label>
+        <select id="canteenPayment">
+          <option value="upi">UPI</option>
+          <option value="cash">Cash on Pickup</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+          <p style="margin-bottom: 8px; font-weight: 600;">Total Amount: ₹<span id="canteenTotal">0</span></p>
+          <p style="font-size: 0.9rem; color: var(--text-light);">Pay to: 8248272961@ybl</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Xerox Form -->
+    <div id="xeroxForm" style="display: none; margin-top: 25px;">
+      <h3 style="margin-bottom: 15px;">Xerox Service Details</h3>
+      
+      <div class="form-group">
+        <label for="mobile"><i class="fas fa-phone"></i> WhatsApp Number</label>
+        <input type="text" id="mobile" placeholder="Enter your WhatsApp number for updates">
+      </div>
+      
+      <div class="form-group">
+        <label for="description"><i class="fas fa-file-alt"></i> Description</label>
+        <input type="text" id="description" placeholder="Brief description of documents">
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label for="pages">Number of Pages</label>
+          <input type="number" id="pages" min="1" value="1" oninput="updateXeroxCost()">
+        </div>
+        
+        <div class="form-group">
+          <label for="copies">Number of Copies</label>
+          <input type="number" id="copies" min="1" value="1" oninput="updateXeroxCost()">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="side">Print Side</label>
+        <select id="side" onchange="updateXeroxCost()">
+          <option value="single">Single Side (₹2/page)</option>
+          <option value="double">Double Side (₹3/page)</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="xeroxPayment">Payment Method</label>
+        <select id="xeroxPayment">
+          <option value="upi">UPI</option>
+          <option value="cash">Cash on Pickup</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+          <p style="margin-bottom: 8px; font-weight: 600;">Estimated Cost: ₹<span id="xeroxCost">0</span></p>
+          <p style="font-size: 0.9rem; color: var(--text-light);">Pay to: 8248272961@ybl</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Admin Form -->
+    <div id="adminForm" style="display: none; margin-top: 25px;">
+      <h3 style="margin-bottom: 15px;">Admin Service Details</h3>
+      
+      <div class="form-group">
+        <label for="service"><i class="fas fa-cog"></i> Service Required</label>
+        <select id="service">
+          <option value="Certificate">Certificate Request</option>
+          <option value="Document">Document Verification</option>
+          <option value="Fee">Fee Payment</option>
+          <option value="Other">Other Service</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="notes"><i class="fas fa-sticky-note"></i> Additional Notes</label>
+        <textarea id="notes" rows="3" placeholder="Any additional information that might be helpful"></textarea>
+      </div>
+    </div>
+    
+    <button class="submit-btn" onclick="submitRequest()">
+      <i class="fas fa-paper-plane"></i> Submit Request
+    </button>
+  </div>
+  
+  <!-- Active Requests Tab -->
+  <div id="activeTab" class="tab-content">
+    <h2>Your Active Requests</h2>
+    <p class="service-desc">Track the status of your current requests and estimated completion times.</p>
+    
+    <div id="activeRequests">
+      <div class="empty-state">
+        <i class="fas fa-clock"></i>
+        <h3>No Active Requests</h3>
+        <p>You don't have any active requests at the moment.</p>
+        <button class="submit-btn" onclick="switchTab('new')">
+          <i class="fas fa-plus"></i> Create New Request
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- History Tab -->
+  <div id="historyTab" class="tab-content">
+    <h2>Request History</h2>
+    <p class="service-desc">View your previously submitted requests and their status.</p>
+    
+    <div id="historyRequests">
+      <div class="empty-state">     
+        <i class="fas fa-history"></i>
+        <h3>No History Yet</h3>
+        <p>Your request history will appear here once you make your first request.</p>
+        <button class="submit-btn" onclick="switchTab('new')">
+          <i class="fas fa-plus"></i> Create New Request
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Firebase configuration (to be filled in later)
+    const firebaseConfig = {
+      // Will be provided later
+    };
+    
+    // Global variables
+    let currentStudentId = '';
+    let cancelRequestId = '';
+    let cancelQueueType = '';
+    let selectedService = '';
+    let db = null;
+    
+    // UI Functions
+    function showUserLoading(show) {
+      document.getElementById('loadingUser').style.display = show ? 'flex' : 'none';
+    }
+    
+    function showUserError(message) {
+      const errorDiv = document.getElementById('userError');
+      document.getElementById('errorMessage').textContent = message;
+      errorDiv.style.display = 'flex';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
+    
+    function showUserSuccess(message) {
+      const successDiv = document.getElementById('userSuccess');
+      document.getElementById('successMessage').textContent = message;
+      successDiv.style.display = 'flex';
+      setTimeout(() => {
+        successDiv.style.display = 'none';
+      }, 3000);
+    }
+    
+    function hideModal() {
+      document.getElementById('cancelModal').style.display = 'none';
+    }
+    
+    function showCancelModal(queueType, requestId) {
+      cancelRequestId = requestId;
+      cancelQueueType = queueType;
+      document.getElementById('cancelModal').style.display = 'flex';
+    }
+    
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+      document.getElementById(`${tabName}Tab`).classList.add('active');
+      
+      if (tabName === 'active') {
+        loadActiveRequests();
+      } else if (tabName === 'history') {
+        loadHistory();
+      }
+    }
+    
+    function selectService(service) {
+      selectedService = service;
+      
+      // Update UI
+      document.querySelectorAll('.service-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      event.currentTarget.classList.add('selected');
+      
+      // Show appropriate form
+      document.getElementById('canteenForm').style.display = 'none';
+      document.getElementById('xeroxForm').style.display = 'none';
+      document.getElementById('adminForm').style.display = 'none';
+      
+      if (service === 'canteen') {
+        document.getElementById('canteenForm').style.display = 'block';
+        updateCanteenTotal();
+      } else if (service === 'xerox') {
+        document.getElementById('xeroxForm').style.display = 'block';
+        updateXeroxCost();
+      } else if (service === 'admin') {
+        document.getElementById('adminForm').style.display = 'block';
+      }
+    }
+    
+    function updateCanteenTotal() {
+      const checkboxes = document.querySelectorAll('input[name="canteenItem"]:checked');
+      let total = 0;
+      
+      checkboxes.forEach(checkbox => {
+        if (checkbox.value === 'Coffee' || checkbox.value === 'Tea') total += 10;
+        else if (checkbox.value === 'Sandwich') total += 25;
+        else if (checkbox.value === 'Samosa') total += 15;
+        else if (checkbox.value === 'Meals') total += 50;
+      });
+      
+      document.getElementById('canteenTotal').textContent = total;
+    }
+    
+    function updateXeroxCost() {
+      const pages = parseInt(document.getElementById('pages').value) || 1;
+      const copies = parseInt(document.getElementById('copies').value) || 1;
+      const side = document.getElementById('side').value;
+      
+      const costPerPage = side === 'single' ? 2 : 3;
+      const total = pages * copies * costPerPage;
+      
+      document.getElementById('xeroxCost').textContent = total;
+    }
+    
+    // Mock functions for demonstration
+    function submitRequest() {
+      const studentId = document.getElementById('studentId').value.trim();
+      
+      if (!studentId) {
+        showUserError("Please enter your student ID");
+        return;
+      }
+      
+      if (!selectedService) {
+        showUserError("Please select a service");
+        return;
+      }
+      
+      showUserLoading(true);
+      
+      // Simulate API call
+      setTimeout(() => {
+        showUserLoading(false);
+        showUserSuccess("Request submitted successfully!");
+        
+        // Clear form
+        document.getElementById('studentId').value = '';
+        document.querySelectorAll('.service-card').forEach(card => {
+          card.classList.remove('selected');
+        });
+        document.getElementById('canteenForm').style.display = 'none';
+        document.getElementById('xeroxForm').style.display = 'none';
+        document.getElementById('adminForm').style.display = 'none';
+        selectedService = '';
+        
+        // Switch to active tab
+        switchTab('active');
+      }, 1500);
+    }
+    
+    function confirmCancel() {
+      showUserLoading(true);
+      
+      // Simulate API call
+      setTimeout(() => {
+        showUserLoading(false);
+        hideModal();
+        showUserSuccess("Request cancelled successfully");
+        loadActiveRequests();
+      }, 1000);
+    }
+    
+    function loadActiveRequests() {
+      // This would be connected to Firebase in a real implementation
+      document.getElementById('activeRequests').innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-clock"></i>
+          <h3>No Active Requests</h3>
+          <p>You don't have any active requests at the moment.</p>
+          <button class="submit-btn" onclick="switchTab('new')">
+            <i class="fas fa-plus"></i> Create New Request
+          </button>
+        </div>
+      `;
+    }
+    
+    function loadHistory() {
+      // This would be connected to Firebase in a real implementation
+      document.getElementById('historyRequests').innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-history"></i>
+          <h3>No History Yet</h3>
+          <p>Your request history will appear here once you make your first request.</p>
+          <button class="submit-btn" onclick="switchTab('new')">
+            <i class="fas fa-plus"></i> Create New Request
+          </button>
+        </div>
+      `;
+    }
+    
+    // Initialize
+    window.onload = function() {
+      // Check if we have a student ID in localStorage
+      const savedStudentId = localStorage.getItem('queueCutStudentId');
+      if (savedStudentId) {
+        document.getElementById('studentId').value = savedStudentId;
+        currentStudentId = savedStudentId;
+      }
+      
+      // Save student ID when it changes
+      document.getElementById('studentId').addEventListener('change', function() {
+        currentStudentId = this.value.trim();
+        if (currentStudentId) {
+          localStorage.setItem('queueCutStudentId', currentStudentId);
+        }
+      });
+    };
+  </script>
+</body>
+</html>
